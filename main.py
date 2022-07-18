@@ -26,7 +26,7 @@ def write_data_to_txt(table):
 
 def write_data_to_ics(table):
     table.pop(0)
-    i = open("test1.ics", "w")
+    i = open("out.ics", "w")
 
     i.write("BEGIN:VCALENDAR\n")
     i.write("VERSION:2.0\n")
@@ -58,7 +58,7 @@ def write_data_to_ics(table):
 tt_data = generate_table_data(readfile())
 table = tt.AsciiTable(tt_data,"Stundenzettel")
 # print(tt_data)
-# print(table.table)
-# write_data_to_txt(table.table)
+print(table.table)
+write_data_to_txt(table.table)
 write_data_to_ics(tt_data)
 

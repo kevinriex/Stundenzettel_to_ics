@@ -3,6 +3,7 @@ Arbeitszeitnachweis_Aushilfe_KevinRiexinger.xlsx
 data.xlsx
 data.csv
 googleexport.ics
+out.txt
 
 *.ics
 !sample.ics
