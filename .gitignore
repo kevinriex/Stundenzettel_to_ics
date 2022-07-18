@@ -4,6 +4,7 @@ data.xlsx
 data.csv
 googleexport.ics
 out.txt
+.env
 
 tests/
 
