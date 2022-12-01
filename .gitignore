@@ -1,11 +1,16 @@
 ~$Arbeitszeitnachweis_Aushilfe_KevinRiexinger.xlsx
 Arbeitszeitnachweis_Aushilfe_KevinRiexinger.xlsx
+~$Arbeitszeitnachweis_Aushilfe_KevinRiexinger_FINAL.xlsx
+Arbeitszeitnachweis_Aushilfe_KevinRiexinger_FINAL.xlsx
 data.xlsx
 data.csv
+data_old.csv
 googleexport.ics
-out.txt
+*txt
 
 tests/
 
 *.ics
 !sample.ics
+
+komisch.txt

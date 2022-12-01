@@ -1,7 +1,7 @@
 import terminaltables as tt
 
-def readfile():
-    f = open("data.csv")
+def readfile(fileN):
+    f = open(fileN)
     data = f.readlines()
     f.close()
     data.pop(0)
@@ -17,10 +17,12 @@ def generate_table_data(data):
             c = date[17:22]
             d = date[23:-1]
             tt_data.append([a,b,c,d])
+        else:
+            tt_data.append(["///","///","///","///"])
     return tt_data
 
-def write_data_to_txt(table):
-    d = open("out.txt", "w")
+def write_data_to_txt(table, name):
+    d = open(name, "w")
     d.write(table)
     d.close()
 
@@ -31,6 +33,24 @@ def write_data_to_ics(table):
     i.write("BEGIN:VCALENDAR\n")
     i.write("VERSION:2.0\n")
     i.write("CALSCALE:GREGORIAN\n")
+    i.write("BEGIN:VTIMEZONE\n")
+    i.write("TZID:Europe/Berlin\n")
+    i.write("X-LIC-LOCATION:Europe/Berlin\n")
+    i.write("BEGIN:DAYLIGHT\n")
+    i.write("TZOFFSETFROM:+0100\n")
+    i.write("TZOFFSETTO:+0200\n")
+    i.write("TZNAME:CEST\n")
+    i.write("DTSTART:19700329T020000\n")
+    i.write("RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=3\n")
+    i.write("END:DAYLIGHT\n")
+    i.write("BEGIN:STANDARD\n")
+    i.write("TZOFFSETFROM:+0200\n")
+    i.write("TZOFFSETTO:+0100\n")
+    i.write("TZNAME:CET\n")
+    i.write("DTSTART:19701025T030000\n")
+    i.write("RRULE:FREQ=YEARLY;INTERVAL=1;BYDAY=-1SU;BYMONTH=10\n")
+    i.write("END:STANDARD\n")
+    i.write("END:VTIMEZONE\n")
     for x in table:
         i.write("BEGIN:VEVENT\n")
         i.write("SUMMARY:KomMITT Arbeitstag\n")
@@ -55,10 +75,34 @@ def write_data_to_ics(table):
 
     i.close()
 
-tt_data = generate_table_data(readfile())
-table = tt.AsciiTable(tt_data,"Stundenzettel")
+def compare_old_new(new, old):
+    for x in range(1,len(new)):
+        if len(new) >= len(old):
+            if new[x] == old[x]:
+                old[x] = ["///","///","///","///"]
+                new[x] = ["///","///","///","///"]
+    data = [item for item in new if item != ["///","///","///","///"]]
+    return data
+
+data_new = readfile("data.csv")
+data_old = readfile("data_old.csv")
+
+tt_data_new = generate_table_data(data_new)
+tt_data_old = generate_table_data(data_old)
+
+table_new = tt.AsciiTable(tt_data_new,"Stundenzettel")
+table_old = tt.AsciiTable(tt_data_old,"Stundenzettel")
+
+write_data_to_txt(table_new.table,"new.txt")
+write_data_to_txt(table_old.table,"old.txt")
+
+
+
+data = compare_old_new(tt_data_new,tt_data_old)
+
+table = tt.AsciiTable(data,"Stundenzettel")
 # print(tt_data)
 print(table.table)
-write_data_to_txt(table.table)
-write_data_to_ics(tt_data)
+write_data_to_txt(table.table,"out-new.txt")
+write_data_to_ics(data)
 
